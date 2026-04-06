@@ -7,4 +7,5 @@ urlpatterns = [
     path('sales/', views.SalesHistoryListCreateAPI.as_view()),
     # 🌟 연결할 뷰 이름 변경!
     path('forecasts/', views.ForecastResultListAPI.as_view()), 
+    path('weather/', views.get_weather, name='get_weather'),
 ]

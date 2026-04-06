@@ -118,3 +118,18 @@ class OrderRecommendation(models.Model):
 
     def __str__(self):
         return f"[{self.get_priority_display()}] {self.product.name} - {self.recommended_qty}개 발주 권고"
+    
+
+
+class Weather(models.Model):
+    # ⭐️ 지역 이름표 추가! (기본값은 서울)
+    region = models.CharField(max_length=20, verbose_name="지역", default="서울")
+    
+    base_date = models.CharField(max_length=8, verbose_name="예보날짜")
+    base_time = models.CharField(max_length=4, verbose_name="예보시간")
+    temperature = models.FloatField(verbose_name="온도(℃)", null=True, blank=True)
+    precipitation = models.FloatField(verbose_name="강수량(mm)", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"[{self.region}] {self.base_date} {self.base_time} 날씨"

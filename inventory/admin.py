@@ -47,3 +47,9 @@ class OrderRecommendationAdmin(admin.ModelAdmin):
 # Supplier와 SupplierPrice는 기본 형태로 등록
 admin.site.register(Supplier)
 admin.site.register(SupplierPrice)
+
+
+from django.contrib import admin
+from .models import Weather # 본인의 환경에 맞게 import 하세요!
+
+admin.site.register(Weather)
