@@ -21,8 +21,15 @@ class InventoryBatchAdmin(admin.ModelAdmin):
 
 @admin.register(SalesHistory)
 class SalesHistoryAdmin(admin.ModelAdmin):
-    list_display = ('product', 'sale_datetime', 'quantity')
-    list_filter = ('sale_datetime',)
+    # 1. 목록에서 엑셀 표처럼 쫙 보여줄 기둥들 (새로운 AI 맞춤형 필드로 교체!)
+    list_display = ('sale_date', 'region', 'category', 'product_name', 'quantity', 'total_price')
+    
+    # 2. 우측 필터 기능 (날짜별, 지역별, 카테고리별로 클릭해서 모아보기 엄청 편해집니다)
+    list_filter = ('sale_date', 'region', 'category')
+    
+    # 3. 검색 기능 (상품명이나 카테고리로 빠르게 검색!)
+    search_fields = ('product_name', 'category')
+
 
 @admin.register(WasteHistory)
 class WasteHistoryAdmin(admin.ModelAdmin):

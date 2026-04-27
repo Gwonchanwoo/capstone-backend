@@ -53,12 +53,21 @@ class InventoryBatch(models.Model):
         return f"{self.product.name} (EXP: {self.expiration_date}) - 남은수량: {self.current_qty}"
 
 class SalesHistory(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="품목")
-    sale_datetime = models.DateTimeField(default=timezone.now, verbose_name="판매 일시")
-    quantity = models.IntegerField(verbose_name="판매 수량")
+    # 🔗 빈칸이 생기면 채워넣을 기본값(default)을 모두 지정해줍니다!
+    sale_date = models.CharField(max_length=8, default='20260101') 
+    region = models.CharField(max_length=20, default='서울')  
+
+    # 📦 상품 판매 정보
+    product_name = models.CharField(max_length=100, default='미정') 
+    category = models.CharField(max_length=50, default='기타')      
+    quantity = models.IntegerField(default=0)       
+    
+    # 💰 총 판매 금액
+    total_price = models.IntegerField(default=0)    
 
     def __str__(self):
-        return f"{self.sale_datetime.strftime('%Y-%m-%d %H:%M')} - {self.product.name} ({self.quantity}개)"
+        return f"[{self.sale_date} / {self.region}] {self.product_name} : {self.quantity}개"
+    
 
 class WasteHistory(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="품목")
@@ -132,4 +141,6 @@ class Weather(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"[{self.region}] {self.base_date} {self.base_time} 날씨"
+        # 기존: return f"[{self.region}] {self.base_date} {self.base_time} 날씨"
+        # 변경: 관리자가 보기 편하게 14시(낮 2시) 예보라는 걸 명시해줍니다!
+        return f"[{self.region}] {self.base_date} (낮 2시 기준) 날씨"

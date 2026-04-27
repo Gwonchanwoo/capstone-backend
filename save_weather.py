@@ -30,7 +30,9 @@ REGION_COORDS = {
 }
 
 url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
-my_key = 'key here' # 잊지 말고 키 넣기!
+my_key = 'key here' 
+
+
 
 print("☁️ 전국 주요 지역 기상청 데이터를 싹쓸이해 옵니다...")
 
