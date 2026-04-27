@@ -1,7 +1,8 @@
 from rest_framework import generics
-from rest_framework.decorators import api_view  # 👈 새로 추가!
-from rest_framework.response import Response    # 👈 새로 추가!
-from .models import Product, InventoryBatch, SalesHistory, ForecastResult, Weather # 👈 Weather 추가!
+from rest_framework.decorators import api_view  # 👈 기존에 있던 것
+from rest_framework.response import Response    # 👈 기존에 있던 것
+from django.db.models import Sum                # 👈 (추가) 덧셈 계산을 위한 수학 요리사!
+from .models import Product, InventoryBatch, SalesHistory, ForecastResult, Weather
 from .serializers import ProductSerializer, InventorySerializer, SalesHistorySerializer, ForecastResultSerializer, WeatherSerializer
 
 
@@ -22,8 +23,6 @@ class ForecastResultListAPI(generics.ListAPIView):
     queryset = ForecastResult.objects.all()
     serializer_class = ForecastResultSerializer
 
-
-
 @api_view(['GET'])
 def get_weather(request):
     # 1. 프론트엔드가 주소창에 적은 지역 이름표 확인 (안 적었으면 기본값 '서울')
@@ -37,3 +36,26 @@ def get_weather(request):
     
     # 4. 프론트엔드로 쏴주기!
     return Response(serializer.data)
+
+
+# ==========================================
+# 🚀 여기서부터 새로 추가된 매출 통계 API!
+# ==========================================
+@api_view(['GET'])
+def get_sales_summary(request):
+    target_month = request.GET.get('month', '202512')
+
+    sales_in_month = SalesHistory.objects.filter(sale_date__startswith=target_month)
+
+    category_stats = sales_in_month.values('category').annotate(
+        total_qty=Sum('quantity'),
+        total_sales=Sum('total_price')
+    )
+
+    response_data = {
+        "message": f"{target_month} 매출 통계 조회 성공!",
+        "data": list(category_stats)
+    }
+
+    # 5. 프론트엔드로 깔끔하게 쏴주기!
+    return Response(response_data)

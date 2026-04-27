@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inventory',
     'rest_framework',
+    'drf_spectacular',
     'corsheaders',
     'django_apscheduler',
 ]
@@ -127,3 +128,31 @@ STATIC_URL = 'static/'
 # 🌟 (추가) CORS 허용 설정
 CORS_ALLOW_ALL_ORIGINS = True  # 현재는 캡스톤 개발 단계이므로 모든 주소의 접근을 시원하게 허용!
 CORS_ALLOW_CREDENTIALS = True
+
+
+# 🚀 DRF 프레임워크에게 "이제부터 API 설명서는 spectacular가 만든다!" 라고 선언
+# 🚀 DRF 프레임워크 설정 모음
+REST_FRAMEWORK = {
+    # 1. 아까 추가했던 Swagger 메뉴판 설정
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    # ==========================================
+    # 🛡️ 2. 신규 추가: 철벽 방어막 (Throttling) 설정
+    # ==========================================
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle', # 로그인 안 한(익명) 해커 차단용
+        'rest_framework.throttling.UserRateThrottle', # 로그인 한 유저 차단용
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        # 넉넉하게 1분에 60번 (1초에 1번 꼴) 허용으로 수정!
+        'anon': '60/minute', 
+        'user': '1000/day', 
+    }
+}
+# 📖 메뉴판(Swagger) 표지 꾸미기
+SPECTACULAR_SETTINGS = {
+    'TITLE': '카페 재고 및 매출 예측 API',
+    'DESCRIPTION': '프론트엔드 데이터 연동을 위한 백엔드 API 명세서 및 테스트 페이지입니다.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
