@@ -10,7 +10,10 @@ urlpatterns = [
     path('forecasts/', views.ForecastResultListAPI.as_view()), 
     path('weather/', views.get_weather, name='get_weather'),
     
-    # 🚀 새로 추가: 프론트엔드가 호출할 월별 매출 통계 대문!
+    # 프론트엔드가 호출할 월별 매출 통계 대문
     path('sales/summary/', views.get_sales_summary, name='sales_summary'),
+
+    # 진짜 AI 예측을 실행하는 입구
+    path('forecasts/predict/', views.predict_future_sales, name='predict_sales'),
     
 ]
